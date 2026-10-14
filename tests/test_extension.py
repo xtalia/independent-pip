@@ -543,7 +543,7 @@ class ExtensionTests(unittest.TestCase):
         import urllib.error
         from browser_lab import start, RUNTIME
         state = json.loads((RUNTIME/'chrome.json').read_text(encoding='utf-8'))
-        self.assertTrue(any(arg.startswith('--user-data-dir=') and 'yandex-pip-lab' in arg for arg in state['args']), 'Do not restart unowned browsers')
+        self.assertTrue(any(arg == f'--user-data-dir={RUNTIME / "chrome-profile"}' for arg in state['args']), 'Do not restart unowned browsers')
         self.activate()
         wait_for(self.page, 'Boolean(documentPictureInPicture.window?.document.querySelector("#pip-video"))')
         worker = next(t for t in fetch(f'http://127.0.0.1:{PORT}/json/list') if t['type'] == 'service_worker' and t['url'] == f'chrome-extension://{self.extension_id}/background.js')

@@ -1,4 +1,4 @@
-// Independent implementation. No Yandex source or privileged API is used.
+// Enhanced Picture-in-Picture controls for the source video.
 (async () => {
   'use strict';
   const key = '__independentPiPState';

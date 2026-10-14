@@ -1,9 +1,8 @@
 {
-  "version": "1.2.0",
+  "version": "1.2.1",
   "passed": true,
-  "browser": "Chrome/155.0.8059.40",
+  "browser": "Chrome/155.0.8059.80",
   "source_tests_run": 38,
-  "package_tests_run": 8,
   "tests": [
     {
       "id": "test_extension.ExtensionTests.test_01_toolbar_opens_mirror_without_detaching_source",
@@ -164,11 +163,11 @@
     "icons/pip-16.png": "f232bc3cff5db18c64d35146da66a61c9eae462cb1a6cdfd52a9a48638d48a88",
     "icons/pip-32.png": "f4233c2fee9975525956a5d31e75a31229a840f1b0a3876f77b2c493c89e2bc7",
     "icons/pip-48.png": "8ce828effe878530dc48a6aa811d1385da284e885f6b969425ed150f1dd7fd02",
-    "manifest.json": "4b31cd7107ce0aa1a41289b8e5f51a0607c0eeeb0ffc8fdf4e929c460b6f2474",
+    "manifest.json": "4e3acd1966529600c6492fac30dd359d0cd6da822550d4caf6a038cfd8fb6765",
     "options.css": "b4a20386d6b06eed6b9f0f122c56804521c0ca5cdad2c389e097dcf81837272f",
     "options.html": "bf5e8fe73bbf82baf02968535b8da8f37468ea6af3c456e712d9964c972db6e3",
     "options.js": "3619a45b73e244362eacf9fd1e6eb5885cbf465abad76330ccc1dc964a3834d9",
-    "pip.js": "5b09f0575f8aeeb3e8a21a49629f279e53008fbb04b9fa5854e8d3632b748d43",
+    "pip.js": "877457b9bc5e03a1a3c3ca3459f3666472dc030fbd9ddedf624abeeac8c984e1",
     "settings.js": "dc40564b84dbf927aa3a048119aebbf3340aff1fab2f57f75dc59817e5a37f47"
   },
   "static_security_findings": [],
@@ -176,7 +175,7 @@
     "Visible Windows physical-mouse dragging / visual smoothness and topmost over other applications (native windows.update separately verified in hidden headed Chrome)",
     "Global OS shortcut assignment",
     "Real DRM services",
-    "Site-specific custom captions and all production video sites",
-    "Full native Yandex browser.dll decompilation and compositor trace"
-  ]
+    "Site-specific custom captions and all production video sites"
+  ],
+  "package_tests_run": 8
 }

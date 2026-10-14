@@ -18,7 +18,7 @@ node --check extension/options.js
 
 ## Реальные browser integration tests — Windows
 
-Текущий стенд рассчитан на установленный Chrome по пути `C:/Program Files/Google/Chrome/Application/chrome.exe`, Node.js с встроенным WebSocket и Python. Он использует отдельный профиль под `%LOCALAPPDATA%/hermes/cache/scratch/yandex-pip-lab/`, а не обычный профиль Chrome. Нужна современная версия Chrome с CDP Extensions и Document PiP; исходная регрессия выполнена на Chrome 155.
+Текущий стенд рассчитан на установленный Chrome по пути `C:/Program Files/Google/Chrome/Application/chrome.exe`, Node.js с встроенным WebSocket и Python. Он использует отдельный профиль под `%LOCALAPPDATA%/hermes/cache/scratch/independent-pip-lab/`, а не обычный профиль Chrome. Нужна современная версия Chrome с CDP Extensions и Document PiP; исходная регрессия выполнена на Chrome 155.
 
 1. Убедись, что порты 8766 и 9233 не заняты другими приложениями. **Не закрывай чужие процессы для освобождения портов.**
 2. В отдельном терминале из корня проекта запусти fixture-сервер:
@@ -52,4 +52,4 @@ node --check extension/options.js
 
 GitHub Actions проверяет синтаксис, manifest, тесты принадлежности браузера и соответствие runtime SHA-256 браузерной проверке. Это не повторный запуск browser integration suite. Перед изменением runtime нужно выполнить реальные проверки и обновить version-specific evidence/hash gate; не подменяй проверенные SHA-256 только ради зелёного CI.
 
-Исследовательские ресурсы Яндекса, пользовательские reference-изображения и локальные raw-отчёты исключены из Git. Стабильный GitHub release не означает публикацию в Chrome Web Store.
+Локальные рабочие материалы и raw-отчёты исключены из Git. Стабильный GitHub release не означает публикацию в Chrome Web Store.

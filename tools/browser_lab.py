@@ -12,9 +12,9 @@ ROOT = Path(__file__).resolve().parents[1]
 # Native Windows subprocesses may inherit the system TMPDIR instead of Hermes
 # scratch. Keep this isolated lab explicitly inside the managed scratch tree.
 SCRATCH = (Path(os.environ['LOCALAPPDATA']) / 'hermes/cache/scratch') if os.name == 'nt' else Path(os.environ['TMPDIR'])
-RUNTIME = SCRATCH / 'yandex-pip-lab'
-BINARIES = {'yandex': 'C:/Program Files/Yandex/YandexBrowser/Application/browser.exe', 'chrome': 'C:/Program Files/Google/Chrome/Application/chrome.exe'}
-PORTS = {'yandex': 9232, 'chrome': 9233}
+RUNTIME = SCRATCH / 'independent-pip-lab'
+BINARIES = {'chrome': 'C:/Program Files/Google/Chrome/Application/chrome.exe'}
+PORTS = {'chrome': 9233}
 # Preserve launch handles during an owning verification process. Browser lifecycle
 # is controlled through loopback CDP; its PID/profile are also recorded on disk.
 OWNED_PROCESSES = []
