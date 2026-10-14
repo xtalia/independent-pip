@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Independent PiP — настройки</title>
+  <link rel="stylesheet" href="options.css">
+  <script src="settings.js" defer></script>
+  <script src="options.js" defer></script>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">INDEPENDENT PiP / 1.1</p>
+    <h1>Свой темп.</h1>
+    <p class="intro">Настрой скорости и панель управления. Всё сохраняется только в этом профиле Chrome.</p>
+    <form id="prefs-form">
+    <label for="speed-mode">Список скоростей</label>
+    <select id="speed-mode">
+      <option value="presets">Избранные: 0.5, 1, 1.10, 1.15, 1.25, 1.5, 2×</option>
+      <option value="step">Расширенный список с заданным шагом (0.25–4×)</option>
+    </select>
+      <label for="speed-step">Шаг списка скоростей</label>
+      <select id="speed-step"><option value="0.05">0.05× — подробный</option><option value="0.1">0.1×</option><option value="0.25">0.25×</option><option value="0.5">0.5× — компактный</option></select>
+      <p class="hint">Диапазон 0.25–4×. Скорость 1× доступна при любом шаге.</p>
+      <label for="custom-rates">Свои значения скорости</label>
+      <textarea id="custom-rates" rows="3" maxlength="1200" placeholder="1.1; 1.234; 1.777"></textarea>
+      <p class="hint">Разделяй значения пробелом, новой строкой или точкой с запятой. Допустима десятичная запятая: 1,234. Не более 64 значений.</p>
+      <label class="check"><input id="auto-hide" type="checkbox"> Скрывать controls при воспроизведении после 3 секунд бездействия</label>
+      <label class="check"><input id="show-seek-buttons" type="checkbox"> Показывать кнопки перемотки ⏪ / ⏩</label>
+      <p class="hint">На паузе, при фокусе клавиатуры или открытом меню controls остаются видимыми. По умолчанию автоскрытие выключено.</p>
+      <div class="actions"><button type="submit" id="prefs-save">Сохранить</button><button type="button" id="prefs-reset">Сбросить</button></div>
+      <p id="prefs-status" role="status" aria-live="polite"></p>
+    </form>
+    <footer>Открытие PiP не меняет текущую скорость видео. Точную скорость можно ввести и прямо в меню окна.</footer>
+  </main>
+</body>
+</html>

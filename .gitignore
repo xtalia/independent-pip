@@ -1,0 +1,19 @@
+# Keep local investigation and generated artifacts out of the repository.
+research/
+reports/
+dist/
+releases/
+.hermes/
+docs/references/
+docs/ui-v1.1.md
+tools/probe_*.py
+tools/release_v12.py
+__pycache__/
+*.py[cod]
+.env
+.env.*
+*.pem
+*.key
+*.pak
+*.dll
+.DS_Store

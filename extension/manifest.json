@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Independent PiP",
+  "version": "1.2.0",
+  "description": "Picture-in-Picture с управлением исходным видео: без второго декодера и без переноса video из страницы.",
+  "minimum_chrome_version": "116",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "options_ui": {"page": "options.html", "open_in_tab": true},
+  "background": {"service_worker": "background.js"},
+  "icons": {"16": "icons/pip-16.png", "32": "icons/pip-32.png", "48": "icons/pip-48.png", "128": "icons/pip-128.png"},
+  "action": {
+    "default_title": "Открыть Picture-in-Picture (Alt+Shift+P)",
+    "default_icon": {"16": "icons/pip-16.png", "32": "icons/pip-32.png", "48": "icons/pip-48.png"}
+  },
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {"default": "Alt+Shift+P"},
+      "description": "Открыть или закрыть Picture-in-Picture"
+    }
+  },
+  "content_security_policy": {"extension_pages": "script-src 'self'; object-src 'self'"}
+}

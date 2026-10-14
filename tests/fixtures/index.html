@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="ru"><meta charset="utf-8"><title>PiP laboratory</title>
+<style>body{margin:24px;background:#16181e;color:#f3f3f3;font:16px system-ui}video{width:720px;max-width:90vw;background:#000}button{padding:12px;margin:8px}</style>
+<h1>PiP laboratory</h1>
+<video id="main" controls loop src="flower.mp4"></video>
+<p><button id="play" onclick="document.querySelector('video').play()">Play</button><button id="pip" onclick="document.querySelector('video').requestPictureInPicture().catch(e=>document.querySelector('#error').textContent=String(e))">Native PiP</button><button id="document" onclick="documentPictureInPicture.requestWindow({width:480,height:320}).then(w=>w.document.body.textContent='Real Document PiP').catch(e=>document.querySelector('#error').textContent=String(e))">Document PiP</button></p>
+<pre id="error"></pre>
+</html>

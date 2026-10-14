@@ -1,0 +1,51 @@
+name: Package checks
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.14'
+      - name: Browser ownership safety tests
+        env:
+          TMPDIR: ${{ runner.temp }}
+        run: python -m unittest discover -s tests -p test_browser_lab.py -v
+      - name: JavaScript syntax
+        run: |
+          for file in extension/*.js; do node --check "$file"; done
+      - name: Manifest and tested runtime hashes
+        run: |
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          root = Path('extension')
+          manifest = json.loads((root / 'manifest.json').read_text(encoding='utf-8'))
+          verification = json.loads(Path('docs/verification-v1.2.json').read_text(encoding='utf-8'))
+          assert manifest['manifest_version'] == 3
+          assert manifest['version'] == verification['version']
+          assert manifest['permissions'] == ['activeTab', 'scripting', 'storage']
+          assert 'host_permissions' not in manifest and 'content_scripts' not in manifest
+          references = {manifest['background']['service_worker'], manifest['options_ui']['page'], *manifest['icons'].values(), *manifest['action']['default_icon'].values()}
+          assert all((root / path).is_file() for path in references)
+          hashes = {path.relative_to(root).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest() for path in root.rglob('*') if path.is_file()}
+          assert hashes == verification['tested_code_sha256'], 'Runtime changed: rerun browser verification and update evidence before release'
+          assert verification['passed'] is True
+          print('PASS: manifest, permissions, references and browser-tested runtime hashes')
+          PY
+      - name: Unpacked extension artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: independent-pip-unpacked
+          path: extension/
+          if-no-files-found: error

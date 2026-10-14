@@ -1,0 +1,182 @@
+{
+  "version": "1.2.0",
+  "passed": true,
+  "browser": "Chrome/155.0.8059.40",
+  "source_tests_run": 38,
+  "package_tests_run": 8,
+  "tests": [
+    {
+      "id": "test_extension.ExtensionTests.test_01_toolbar_opens_mirror_without_detaching_source",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_02_controls_change_master_not_an_independent_player",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_03_source_removal_closes_window_and_releases_capture",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_04_playing_video_wins_over_larger_paused_video",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_05_cross_origin_capture_denial_uses_real_native_pip",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_06_same_origin_iframe_video_is_discovered",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_07_open_shadow_root_video_is_discovered",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_08_active_vtt_cues_are_rendered_as_safe_text",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_09_keyboard_controls_master_and_escape_closes",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_10_no_video_has_explicit_badge_error",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_11_toggle_releases_tracks_and_can_reopen",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_12_source_change_closes_stale_mirror",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_13_opening_does_not_autoplay_paused_source",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_14_dynamically_created_video_is_found",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_15_site_pip_disable_is_respected",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_16_media_source_blob_pipeline_is_not_reloaded",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_17_video_click_toggles_source_without_rewinding",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_18_symbol_controls_follow_source_state",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_19_preset_speed_list_preserves_existing_exact_rate",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_20_exact_manual_speed_validates_without_play_toggle",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_21_options_save_validate_restore_and_reset_preferences",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_22_overlay_layout_fills_window_and_fits_compact_width",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_23_menu_escape_outside_click_and_options_button",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_24_opt_in_auto_hide_wakes_and_respects_pause_focus_menu",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_25_space_on_video_and_button_toggles_exactly_once",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_26_corrupt_stored_preferences_are_bounded",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_27_preferences_survive_owned_browser_restart",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_28_control_smoke_has_no_runtime_or_console_errors",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_29_close_releases_capture_and_storage_listener_with_pending_hide",
+      "status": "passed"
+    },
+    {
+      "id": "test_v12.V12Tests.test_30_default_speed_presets",
+      "status": "passed"
+    },
+    {
+      "id": "test_v12.V12Tests.test_31_speed_mode_options_and_migration",
+      "status": "passed"
+    },
+    {
+      "id": "test_v12.V12Tests.test_32_seek_visibility_live_and_persistent",
+      "status": "passed"
+    },
+    {
+      "id": "test_v12.V12Tests.test_33_volume_hover_horizontal_vertical_and_keyboard",
+      "status": "passed"
+    },
+    {
+      "id": "test_v12.V12Tests.test_34_drag_moves_only_pip_without_play_toggle",
+      "status": "passed"
+    },
+    {
+      "id": "test_v12.V12Tests.test_35_volume_pointer_leave_after_mouse_focus",
+      "status": "passed"
+    },
+    {
+      "id": "test_v12.V12Tests.test_36_drag_safety_closed_binding_and_reopen",
+      "status": "passed"
+    },
+    {
+      "id": "test_v12.V12Tests.test_37_drag_survives_actual_worker_restart",
+      "status": "passed"
+    },
+    {
+      "id": "test_v12.V12Tests.test_38_mute_restores_last_volume_after_zero_slider",
+      "status": "passed"
+    }
+  ],
+  "tested_code_sha256": {
+    "background.js": "e642892013197f6c3fb2b884e4c0cbeb450a746ed765d89ab648cd9e252bc7d5",
+    "icons/pip-128.png": "29a8090cd500ef3fc082bc11af8440daf8fd93a081b53e69dd6dccbdda4290f7",
+    "icons/pip-16.png": "f232bc3cff5db18c64d35146da66a61c9eae462cb1a6cdfd52a9a48638d48a88",
+    "icons/pip-32.png": "f4233c2fee9975525956a5d31e75a31229a840f1b0a3876f77b2c493c89e2bc7",
+    "icons/pip-48.png": "8ce828effe878530dc48a6aa811d1385da284e885f6b969425ed150f1dd7fd02",
+    "manifest.json": "4b31cd7107ce0aa1a41289b8e5f51a0607c0eeeb0ffc8fdf4e929c460b6f2474",
+    "options.css": "b4a20386d6b06eed6b9f0f122c56804521c0ca5cdad2c389e097dcf81837272f",
+    "options.html": "bf5e8fe73bbf82baf02968535b8da8f37468ea6af3c456e712d9964c972db6e3",
+    "options.js": "3619a45b73e244362eacf9fd1e6eb5885cbf465abad76330ccc1dc964a3834d9",
+    "pip.js": "5b09f0575f8aeeb3e8a21a49629f279e53008fbb04b9fa5854e8d3632b748d43",
+    "settings.js": "dc40564b84dbf927aa3a048119aebbf3340aff1fab2f57f75dc59817e5a37f47"
+  },
+  "static_security_findings": [],
+  "manual_unverified": [
+    "Visible Windows physical-mouse dragging / visual smoothness and topmost over other applications (native windows.update separately verified in hidden headed Chrome)",
+    "Global OS shortcut assignment",
+    "Real DRM services",
+    "Site-specific custom captions and all production video sites",
+    "Full native Yandex browser.dll decompilation and compositor trace"
+  ]
+}
