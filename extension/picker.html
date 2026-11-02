@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="ru">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Выбор видео — Independent PiP</title><link rel="stylesheet" href="picker.css"></head>
+<body>
+<header><span class="eyebrow">INDEPENDENT PiP</span><h1>Выбери видео</h1><p>На текущей вкладке нет играющего поддерживаемого видео. Можно открыть видео на других вкладках или выбрать видео на паузе.</p></header>
+<section id="access" hidden><p>Для поиска на других вкладках нужен доступ к HTTP/HTTPS-сайтам. Поиск выполняется только по твоему запросу, данные никуда не отправляются.</p><button id="grant-access" type="button">Разрешить поиск на вкладках</button></section>
+<div class="toolbar"><button id="refresh" type="button">Обновить список</button><span id="count"></span></div>
+<p id="status" role="status" aria-live="polite"></p>
+<main id="videos" aria-label="Доступные видео"></main>
+<script src="picker.js"></script>
+</body></html>
