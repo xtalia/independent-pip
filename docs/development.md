@@ -12,6 +12,9 @@ node --check extension/background.js
 node --check extension/pip.js
 node --check extension/settings.js
 node --check extension/options.js
+node --check extension/media.js
+node --check extension/launch.js
+node --check extension/picker.js
 ```
 
 На Linux для импорта тестового стенда задай `TMPDIR` на существующую временную папку. CI делает это через `runner.temp`.

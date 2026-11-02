@@ -1,39 +1,35 @@
 // Enhanced Picture-in-Picture controls for the source video.
-(async () => {
+globalThis.IndependentPiPOpen = async (selectedId) => {
   'use strict';
   const key = '__independentPiPState';
   const settings = globalThis.IndependentPiPSettings;
   let preferences = settings.normalize(settings.defaults);
   const previous = globalThis[key];
-  if (previous?.window && !previous.window.closed) {
+  if (!selectedId && previous?.window && !previous.window.closed) {
     previous.window.close();
     return { ok: true, mode: 'closed' };
   }
   let capture;
   let pipWindow;
   try {
-    const found = new Set();
-    const visited = new Set();
-    const collect = (root) => {
-      if (!root || visited.has(root)) return;
-      visited.add(root);
-      for (const element of root.querySelectorAll('*')) {
-        if (element.localName === 'video') found.add(element);
-        if (element.shadowRoot) collect(element.shadowRoot);
-        if (element.localName === 'iframe') {
-          try { collect(element.contentDocument); } catch { /* Cross-origin frames are intentionally inaccessible. */ }
-        }
-      }
-    };
-    collect(document);
-    const videos = [...found].filter(v => v.readyState >= 2 && v.videoWidth > 0);
-    const source = videos.sort((a, b) => Number(a.paused) - Number(b.paused) || b.clientWidth * b.clientHeight - a.clientWidth * a.clientHeight)[0];
-    if (!source) throw new Error('На странице нет готового HTML5-видео. Запусти видео и нажми ещё раз.');
-    if (source.ownerDocument.pictureInPictureElement === source) {
-      await source.ownerDocument.exitPictureInPicture();
+    const media = globalThis.IndependentPiPMedia;
+    const videos = media.collect();
+    const source = selectedId
+      ? videos.find(video => media.id(video) === selectedId)
+      : videos.filter(media.allowed).sort((a, b) => Number(media.playing(b)) - Number(media.playing(a)) || b.clientWidth * b.clientHeight - a.clientWidth * a.clientHeight)[0];
+    if (selectedId && !source) throw new Error('Видео больше недоступно. Обнови список и выбери заново.');
+    const nativeSource = videos.find(video => video.ownerDocument.pictureInPictureElement === video);
+    if (!selectedId && nativeSource) {
+      await nativeSource.ownerDocument.exitPictureInPicture();
       return { ok: true, mode: 'closed' };
     }
+    if (!selectedId && (!source || !media.playing(source))) return { ok: true, mode: 'choose' };
+    if (source.ownerDocument.pictureInPictureElement === source) {
+      return { ok: true, mode: 'native' };
+    }
     if (source.disablePictureInPicture) throw new Error('Сайт запретил Picture-in-Picture для этого видео.');
+    if (selectedId && !media.allowed(source)) throw new Error('Браузер или политика страницы запрещает Picture-in-Picture.');
+    if (selectedId && previous?.window && !previous.window.closed) previous.window.close();
     const nativePiP = async () => {
       capture?.getTracks().forEach(track => track.stop());
       if (!source.ownerDocument.pictureInPictureEnabled || typeof source.requestPictureInPicture !== 'function') throw new Error('Браузер или политика страницы запрещает Picture-in-Picture.');
@@ -487,4 +483,4 @@
     pipWindow?.close();
     return { ok: false, message: String(error?.message || error) };
   }
-})()
+};

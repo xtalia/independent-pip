@@ -31,12 +31,13 @@ jobs:
           from pathlib import Path
           root = Path('extension')
           manifest = json.loads((root / 'manifest.json').read_text(encoding='utf-8'))
-          verification = json.loads(Path('docs/verification-v1.2.json').read_text(encoding='utf-8'))
+          verification = json.loads(Path('docs/verification-v1.3.json').read_text(encoding='utf-8'))
           assert manifest['manifest_version'] == 3
           assert manifest['version'] == verification['version']
           assert manifest['permissions'] == ['activeTab', 'scripting', 'storage']
           assert 'host_permissions' not in manifest and 'content_scripts' not in manifest
-          references = {manifest['background']['service_worker'], manifest['options_ui']['page'], *manifest['icons'].values(), *manifest['action']['default_icon'].values()}
+          assert manifest['optional_host_permissions'] == ['http://*/*', 'https://*/*']
+          references = {manifest['background']['service_worker'], manifest['options_ui']['page'], 'media.js', 'settings.js', 'pip.js', 'launch.js', 'picker.html', 'picker.css', 'picker.js', *manifest['icons'].values(), *manifest['action']['default_icon'].values()}
           assert all((root / path).is_file() for path in references)
           hashes = {path.relative_to(root).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest() for path in root.rglob('*') if path.is_file()}
           assert hashes == verification['tested_code_sha256'], 'Runtime changed: rerun browser verification and update evidence before release'

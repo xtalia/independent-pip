@@ -204,18 +204,28 @@ class ExtensionTests(unittest.TestCase):
         }})()'''
         return evaluate(worker, expression)
 
-    def test_10_no_video_has_explicit_badge_error(self):
+    def picker_target(self):
+        deadline = time.monotonic() + 6
+        while time.monotonic() < deadline:
+            target = next((t for t in fetch(f'http://127.0.0.1:{PORT}/json/list') if t['url'].startswith(f'chrome-extension://{self.extension_id}/picker.html')), None)
+            if target:
+                wait_for(target, 'document.body.dataset.ready==="true"')
+                return target
+            time.sleep(.1)
+        self.fail('Video chooser did not open')
+
+    def close_picker(self, target):
+        rpc(self.browser, [{'method':'Target.closeTarget','params':{'targetId':target['id']}}])
+
+    def test_10_no_video_opens_explicit_chooser(self):
         evaluate(self.page, 'originalNode.remove()')
         self.activate()
-        deadline = time.monotonic()+3
-        state = self.action_state()
-        while state['badge'] != '!' and time.monotonic() < deadline:
-            time.sleep(0.1)
-            state = self.action_state()
-        self.assertEqual(state['badge'], '!')
-        self.assertIn('нет готового HTML5-видео', state['title'])
-        self.assertFalse(evaluate(self.page, 'Boolean(documentPictureInPicture.window)'))
-        print('REAL_NO_VIDEO', json.dumps(state, ensure_ascii=False))
+        picker = self.picker_target()
+        try:
+            self.assertIn('не найдено', evaluate(picker, 'document.querySelector("#status").textContent'))
+            self.assertFalse(evaluate(self.page, 'Boolean(documentPictureInPicture.window)'))
+        finally:
+            self.close_picker(picker)
 
     def test_11_toggle_releases_tracks_and_can_reopen(self):
         self.activate()
@@ -237,6 +247,8 @@ class ExtensionTests(unittest.TestCase):
     def test_13_opening_does_not_autoplay_paused_source(self):
         evaluate(self.page, 'originalNode.pause()')
         self.activate()
+        picker = self.picker_target()
+        evaluate(picker, 'document.querySelector(".video").click()', True)
         wait_for(self.page, 'documentPictureInPicture.window?.document.querySelector("#pip-video")?.readyState>=2')
         self.assertTrue(evaluate(self.page, 'originalNode.paused'))
 
@@ -252,14 +264,12 @@ class ExtensionTests(unittest.TestCase):
     def test_15_site_pip_disable_is_respected(self):
         evaluate(self.page, 'originalNode.disablePictureInPicture=true')
         self.activate()
-        deadline = time.monotonic()+3
-        state = self.action_state()
-        while state['badge'] != '!' and time.monotonic() < deadline:
-            time.sleep(0.1)
-            state = self.action_state()
-        self.assertEqual(state['badge'], '!')
-        self.assertIn('Сайт запретил', state['title'])
-        self.assertFalse(evaluate(self.page, 'Boolean(documentPictureInPicture.window || document.pictureInPictureElement)'))
+        picker = self.picker_target()
+        try:
+            self.assertEqual(evaluate(picker, 'document.querySelectorAll(".video").length'), 0)
+            self.assertFalse(evaluate(self.page, 'Boolean(documentPictureInPicture.window || document.pictureInPictureElement)'))
+        finally:
+            self.close_picker(picker)
 
     def test_16_media_source_blob_pipeline_is_not_reloaded(self):
         supported = evaluate(self.page, 'MediaSource.isTypeSupported(\'video/webm;codecs="vp8,vorbis"\')')
