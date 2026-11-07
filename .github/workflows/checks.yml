@@ -23,7 +23,9 @@ jobs:
         run: python -m unittest discover -s tests -p test_browser_lab.py -v
       - name: JavaScript syntax
         run: |
-          for file in extension/*.js; do node --check "$file"; done
+          python -c "from pathlib import Path; import subprocess; [subprocess.run(['node', '--check', str(p)], check=True) for p in Path('extension').rglob('*.js')]"
+      - name: Module and transport unit tests
+        run: node --test tests/*.test.mjs
       - name: Manifest and tested runtime hashes
         run: |
           python - <<'PY'
@@ -31,13 +33,13 @@ jobs:
           from pathlib import Path
           root = Path('extension')
           manifest = json.loads((root / 'manifest.json').read_text(encoding='utf-8'))
-          verification = json.loads(Path('docs/verification-v1.4.1.json').read_text(encoding='utf-8'))
+          verification = json.loads(Path('docs/verification-v1.5.json').read_text(encoding='utf-8'))
           assert manifest['manifest_version'] == 3
           assert manifest['version'] == verification['version']
-          assert manifest['permissions'] == ['activeTab', 'scripting', 'storage']
+          assert manifest['permissions'] == ['activeTab', 'scripting', 'storage', 'contextMenus']
           assert 'host_permissions' not in manifest and 'content_scripts' not in manifest
           assert manifest['optional_host_permissions'] == ['http://*/*', 'https://*/*']
-          references = {manifest['background']['service_worker'], manifest['options_ui']['page'], 'media.js', 'settings.js', 'pip.js', 'launch.js', 'picker.html', 'picker.css', 'picker.js', *manifest['icons'].values(), *manifest['action']['default_icon'].values()}
+          references = {manifest['background']['service_worker'], manifest['options_ui']['page'], 'protocol.js', 'background/windows.js', 'background/discovery.js', 'background/playback.js', 'background/messages.js', 'background/menus.js', 'media.js', 'settings.js', 'pip-view.js', 'pip-drag.js', 'pip.js', 'launch.js', 'picker.html', 'picker.css', 'picker-client.js', 'picker.js', *manifest['icons'].values(), *manifest['action']['default_icon'].values()}
           assert all((root / path).is_file() for path in references)
           hashes = {path.relative_to(root).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest() for path in root.rglob('*') if path.is_file()}
           assert hashes == verification['tested_code_sha256'], 'Runtime changed: rerun browser verification and update evidence before release'

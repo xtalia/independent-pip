@@ -1,0 +1,400 @@
+{
+  "version": "1.5.0",
+  "passed": true,
+  "generated_at": "2026-11-08T01:16:18.244467+04:00",
+  "browser": "Chrome/157.0.8103.39",
+  "headless": true,
+  "expected_test_count": 64,
+  "tests_run": 64,
+  "tests": [
+    {
+      "id": "test_extension.ExtensionTests.test_01_toolbar_opens_mirror_without_detaching_source",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_02_controls_change_master_not_an_independent_player",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_03_source_removal_closes_window_and_releases_capture",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_04_playing_video_wins_over_larger_paused_video",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_05_cross_origin_capture_denial_uses_real_native_pip",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_06_same_origin_iframe_video_is_discovered",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_07_open_shadow_root_video_is_discovered",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_08_active_vtt_cues_are_rendered_as_safe_text",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_09_keyboard_controls_master_and_escape_closes",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_10_no_video_opens_explicit_chooser",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_11_toggle_releases_tracks_and_can_reopen",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_12_source_change_closes_stale_mirror",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_13_opening_does_not_autoplay_paused_source",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_14_dynamically_created_video_is_found",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_15_site_pip_disable_is_respected",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_16_media_source_blob_pipeline_is_not_reloaded",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_17_video_click_toggles_source_without_rewinding",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_18_symbol_controls_follow_source_state",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_19_preset_speed_list_preserves_existing_exact_rate",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_20_exact_manual_speed_validates_without_play_toggle",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_21_options_save_validate_restore_and_reset_preferences",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_22_overlay_layout_fills_window_and_fits_compact_width",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_23_menu_escape_outside_click_and_options_button",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_24_opt_in_auto_hide_wakes_and_respects_pause_focus_menu",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_25_space_on_video_and_button_toggles_exactly_once",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_26_corrupt_stored_preferences_are_bounded",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_27_preferences_survive_owned_browser_restart",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_28_control_smoke_has_no_runtime_or_console_errors",
+      "status": "passed"
+    },
+    {
+      "id": "test_extension.ExtensionTests.test_29_close_releases_capture_and_storage_listener_with_pending_hide",
+      "status": "passed"
+    },
+    {
+      "id": "test_v12.V12Tests.test_30_default_speed_presets",
+      "status": "passed"
+    },
+    {
+      "id": "test_v12.V12Tests.test_31_speed_mode_options_and_migration",
+      "status": "passed"
+    },
+    {
+      "id": "test_v12.V12Tests.test_32_seek_visibility_live_and_persistent",
+      "status": "passed"
+    },
+    {
+      "id": "test_v12.V12Tests.test_33_volume_hover_horizontal_vertical_and_keyboard",
+      "status": "passed"
+    },
+    {
+      "id": "test_v12.V12Tests.test_34_drag_moves_only_pip_without_play_toggle",
+      "status": "passed"
+    },
+    {
+      "id": "test_v12.V12Tests.test_35_volume_pointer_leave_after_mouse_focus",
+      "status": "passed"
+    },
+    {
+      "id": "test_v12.V12Tests.test_36_drag_safety_closed_binding_and_reopen",
+      "status": "passed"
+    },
+    {
+      "id": "test_v12.V12Tests.test_37_drag_survives_actual_worker_restart",
+      "status": "passed"
+    },
+    {
+      "id": "test_v12.V12Tests.test_38_mute_restores_last_volume_after_zero_slider",
+      "status": "passed"
+    },
+    {
+      "id": "test_v13.V13GrantedTests.test_42_other_tab_playing_video_is_first_and_opens_from_real_click",
+      "status": "passed"
+    },
+    {
+      "id": "test_v13.V13GrantedTests.test_43_restricted_current_tab_offers_remote_video",
+      "status": "passed"
+    },
+    {
+      "id": "test_v13.V13GrantedTests.test_44_stale_video_does_not_open_a_different_player",
+      "status": "passed"
+    },
+    {
+      "id": "test_v13.V13GrantedTests.test_45_repeated_toolbar_click_reuses_the_same_picker",
+      "status": "passed"
+    },
+    {
+      "id": "test_v13.V13GrantedTests.test_46_stale_selection_preserves_existing_pip",
+      "status": "passed"
+    },
+    {
+      "id": "test_v13.V13GrantedTests.test_47_unsupported_current_video_offers_remote_playback",
+      "status": "passed"
+    },
+    {
+      "id": "test_v13.V13GrantedTests.test_48_selection_replaces_existing_pip_with_the_chosen_video",
+      "status": "passed"
+    },
+    {
+      "id": "test_v13.V13GrantedTests.test_50_selecting_existing_native_pip_keeps_it_open",
+      "status": "passed"
+    },
+    {
+      "id": "test_v13.V13GrantedTests.test_59_revoking_access_removes_remote_videos",
+      "status": "passed"
+    },
+    {
+      "id": "test_v13.V13Tests.test_40_no_video_opens_picker_with_permission_explanation",
+      "status": "passed"
+    },
+    {
+      "id": "test_v13.V13Tests.test_41_paused_local_videos_can_be_selected_without_autoplay",
+      "status": "passed"
+    },
+    {
+      "id": "test_v13.V13Tests.test_45_repeated_toolbar_click_reuses_the_same_picker",
+      "status": "passed"
+    },
+    {
+      "id": "test_v14.V14Tests.test_60_slow_start_keeps_only_latest_position_before_release",
+      "status": "passed"
+    },
+    {
+      "id": "test_v14.V14Tests.test_61_moves_on_animation_frames_without_a_fixed_32ms_timer",
+      "status": "passed"
+    },
+    {
+      "id": "test_v14.V14Tests.test_62_slow_move_coalesces_positions_and_applies_final_release",
+      "status": "passed"
+    },
+    {
+      "id": "test_v14.V14Tests.test_63_new_gesture_waits_for_previous_final_position_and_end",
+      "status": "passed"
+    },
+    {
+      "id": "test_v14.V14Tests.test_64_close_discards_unsent_positions_and_preserves_playback",
+      "status": "passed"
+    },
+    {
+      "id": "test_ui.UITests.test_speed_selector_remains_keyboard_operable",
+      "status": "passed"
+    },
+    {
+      "id": "test_ui.UITests.test_time_and_speed_share_icon_row_height_at_both_sizes",
+      "status": "passed"
+    },
+    {
+      "id": "test_ui.UITests.test_timeline_hover_previews_pointer_time_without_seeking",
+      "status": "passed"
+    },
+    {
+      "id": "test_ui.UITests.test_title_tooltip_contains_full_untruncated_safe_title",
+      "status": "passed"
+    },
+    {
+      "id": "test_ui.UITests.test_unavailable_caption_toggle_is_not_offered",
+      "status": "passed"
+    },
+    {
+      "id": "test_ui.UITests.test_unseekable_live_stream_does_not_offer_hover_time",
+      "status": "passed"
+    },
+    {
+      "id": "test_picker_resilience.PickerResilienceTests.test_frozen_tab_does_not_block_healthy_video_results",
+      "status": "passed"
+    },
+    {
+      "id": "test_picker_resilience.PickerResilienceTests.test_worker_restart_during_list_recovers_without_raw_channel_error",
+      "status": "passed"
+    },
+    {
+      "id": "test_context_menu.ContextMenuTests.test_action_menu_routes_to_settings_and_explicit_picker",
+      "status": "passed"
+    }
+  ],
+  "syntax_checks": [
+    {
+      "file": "discovery.js",
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "file": "menus.js",
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "file": "messages.js",
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "file": "playback.js",
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "file": "windows.js",
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "file": "background.js",
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "file": "launch.js",
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "file": "media.js",
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "file": "options.js",
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "file": "picker-client.js",
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "file": "picker.js",
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "file": "pip-drag.js",
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "file": "pip-view.js",
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "file": "pip.js",
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "file": "protocol.js",
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "file": "settings.js",
+      "returncode": 0,
+      "output": ""
+    }
+  ],
+  "static_security_findings": [],
+  "manifest_permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "contextMenus"
+  ],
+  "tested_code_sha256": {
+    "background/discovery.js": "95c02195410206914689e76c0300668c932ee6092c509f9f5dee1f56d90f1ab4",
+    "background/menus.js": "7021a7b61c3dba6b9623563d45177bbf2da24d6a7c3b060bc12ad12228283239",
+    "background/messages.js": "9dd2a5820309028ef0fb807ed9497b7ca639f3897a554ceb2a1d69c983cdbbc4",
+    "background/playback.js": "efb42163bfebe0208cb31c26e574d33abb580f1467025980de1c8899c79d358b",
+    "background/windows.js": "d384a9bb1008002653ce59bf8d4ed114b69451ad30c49bf83180574005efb459",
+    "background.js": "194a298c62aa7ce4bc494925141345b1ca2553566dba92634693ffa88913de4f",
+    "icons/pip-128.png": "29a8090cd500ef3fc082bc11af8440daf8fd93a081b53e69dd6dccbdda4290f7",
+    "icons/pip-16.png": "f232bc3cff5db18c64d35146da66a61c9eae462cb1a6cdfd52a9a48638d48a88",
+    "icons/pip-32.png": "f4233c2fee9975525956a5d31e75a31229a840f1b0a3876f77b2c493c89e2bc7",
+    "icons/pip-48.png": "8ce828effe878530dc48a6aa811d1385da284e885f6b969425ed150f1dd7fd02",
+    "launch.js": "2b6c746b01008c39c93c3cac1b8b921a317eb16e41c469ee80b66b0e525ba612",
+    "manifest.json": "47c630f3f19e6b0fb0715003bf153a86190a27a7ccae9fd2b5cfeae79c216b9d",
+    "media.js": "f16755e8dd3017b161670fe422a1f0ecb9b279bd6c834ee5eb6777e5f983d5ae",
+    "options.css": "b4a20386d6b06eed6b9f0f122c56804521c0ca5cdad2c389e097dcf81837272f",
+    "options.html": "bf5e8fe73bbf82baf02968535b8da8f37468ea6af3c456e712d9964c972db6e3",
+    "options.js": "3619a45b73e244362eacf9fd1e6eb5885cbf465abad76330ccc1dc964a3834d9",
+    "picker-client.js": "e0ee4518321544562e7daaf028d2af647880400172dd0cdb67b36d4a66be560e",
+    "picker.css": "7800c52f8e9faf76a543e4ea957be64c95572bebed0904c3aec452d62255f960",
+    "picker.html": "12ad99c3b23c71933a72190775685491ad3314c46986ec56b928ed29c4ee44e7",
+    "picker.js": "f099f30f9fc598dfddff94b90d775576221dce7e1c5b49a4b8e81e4921d5daf8",
+    "pip-drag.js": "e0595798e7d38f4a080e3923d800c32345fa52b2876392cdafbdb13ac3cda5d5",
+    "pip-view.js": "7288bc169a0ee39ec2670ecb34edce44855e4c7ff2e8e71c7d436c7b0fc4747f",
+    "pip.js": "f870e1699e2594537a84e73ceda61587fcd6f9866f6c47c27e76f14fdd2a8a0d",
+    "protocol.js": "d6675c2f9f1ae5081781839fc6754138b9a4d67c7095c55692d6fd49a992b0fc",
+    "settings.js": "dc40564b84dbf927aa3a048119aebbf3340aff1fab2f57f75dc59817e5a37f47"
+  },
+  "manual_unverified": [
+    "Visible Windows physical-mouse dragging / visual smoothness and topmost over other applications (native windows.update separately verified in hidden headed Chrome)",
+    "Global OS shortcut assignment",
+    "Real DRM services",
+    "Native optional-host consent dialog acceptance/rejection (headless request waits for native confirmation; granted/revoked states tested)",
+    "Site-specific custom captions and all production video sites",
+    "Physical Windows toolbar context-menu rendering/click; real registration and callback API effects tested in isolated Chrome"
+  ],
+  "node_unit_tests": {
+    "returncode": 0,
+    "output": "✔ worker modules expose frozen namespaces, not ambient implementation variables (4.1105ms)\n✔ router ignores unknown or foreign messages and invokes selection before returning (5.6375ms)\n✔ action menus register settings and explicit chooser only in the toolbar context (3.6555ms)\n✔ list retries once after transport closure, not after an ordinary error (157.9574ms)\n✔ two lost list responses return an actionable error and stop retrying (157.329ms)\n✔ selection sends immediately and never retries a possibly applied side effect (1.6868ms)\n✔ view factory isolates DOM, safe title and accessible controls behind a frozen namespace (4.7441ms)\n✔ rate population accepts current preferences explicitly and preserves an exact source rate (1.5408ms)\n✔ drag coalesces unsent positions with one in-flight request and start/end barriers (8.8052ms)\n✔ orchestrator uses both modules without delaying activation and releases only its capture (4.6608ms)\n✔ pointerup ends a trusted drag, flushes release coordinates and suppresses only pointer clicks (2.073ms)\n✔ pointercancel ends a trusted drag, flushes release coordinates and suppresses only pointer clicks (2.0156ms)\n✔ lostpointercapture ends a trusted drag, flushes release coordinates and suppresses only pointer clicks (2.776ms)\n✔ blur ends a trusted drag, flushes release coordinates and suppresses only pointer clicks (1.6352ms)\n✔ cleanup cancels frames/listeners/queued moves and ignores late message failures (1.9778ms)\n✔ abort cancels frames/listeners/queued moves and ignores late message failures (2.0265ms)\n✔ message failure is reported without poisoning the next ordered drag command (1.5329ms)\nℹ tests 17\nℹ suites 0\nℹ pass 17\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 420.0742\n"
+  },
+  "independent_review": "Passed independent pre-commit review: no security or logic blockers. Reviewer independently ran all 17 Node tests, recursive JavaScript syntax and security checks, and verified exact source report hashes.",
+  "package_tests_run": 27,
+  "expected_package_test_count": 27,
+  "package_tests_passed": true,
+  "package_archive_sha256": "c66889d844145b2600b414fbf5de0520b3346392e95e1ab995b010b98b3316c0"
+}

@@ -1,4 +1,5 @@
 'use strict';
+(() => {
 const origins = ['http://*/*', 'https://*/*'];
 const sourceTabId = Number(new URLSearchParams(location.search).get('source'));
 const status = document.querySelector('#status');
@@ -22,7 +23,7 @@ function showVideo(video) {
     status.textContent = 'Открываем PiP…';
     try {
       // Issue sendMessage before any await to preserve the selection gesture.
-      const result = await chrome.runtime.sendMessage({ type: 'independent-pip:select', tabId: video.tabId, videoId: video.id });
+      const result = await IndependentPiPPickerClient.select(video.tabId, video.id);
       if (!result?.ok) throw new Error(result?.message || 'Не удалось открыть видео. Обнови список.');
       window.close();
     } catch (error) {
@@ -38,14 +39,15 @@ async function refresh() {
   document.body.dataset.ready = 'false';
   status.textContent = 'Ищем доступные видео…';
   try {
-    const result = await chrome.runtime.sendMessage({ type: 'independent-pip:list', sourceTabId });
+    const result = await IndependentPiPPickerClient.requestList(sourceTabId);
     if (request !== generation) return;
     if (!result?.ok) throw new Error(result?.message || 'Не удалось получить список видео.');
     document.querySelector('#access').hidden = result.granted;
     videos.replaceChildren(...result.videos.map(showVideo));
     document.querySelector('#count').textContent = `Видео: ${result.videos.length}`;
     status.textContent = result.videos.length ? 'Играющие видео — в начале списка. Выбор не запускает видео на паузе.' : 'Доступных HTML5-видео не найдено. Запусти видео на другой вкладке и обнови список. Canvas и запрещённый сайтом PiP не поддерживаются.';
-  } catch (error) { status.textContent = error.message; }
+    if (result.incomplete) status.textContent += ' Список частичный: некоторые вкладки не ответили или недоступны. Можно повторить поиск.';
+  } catch (error) { if (request === generation) status.textContent = error.message; }
   finally {
     if (request === generation) { refreshButton.disabled = false; document.body.dataset.ready = 'true'; }
   }
@@ -60,3 +62,4 @@ document.querySelector('#grant-access').addEventListener('click', async () => {
 refreshButton.addEventListener('click', refresh);
 chrome.permissions.onRemoved.addListener(() => refresh());
 refresh();
+})();

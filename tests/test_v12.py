@@ -147,14 +147,14 @@ def test_drag_safety_closed_binding_and_reopen(self):
       const [key,binding]=Object.entries(await chrome.storage.session.get(null)).find(([key])=>key.startsWith('pipWindow:'));
       const sender={id:chrome.runtime.id,frameId:0,tab:await chrome.tabs.get(binding.sourceTabId)};
       const gesture=crypto.randomUUID();
-      await handleDrag({type:'independent-pip:drag-start',nonce:binding.nonce,gesture},sender);
+      await IndependentPiPWorker.windows.handleDrag({type:'independent-pip:drag-start',nonce:binding.nonce,gesture},sender);
       const rejected=[];
       for(const patch of [{nonce:crypto.randomUUID()},{dx:Infinity},{dx:40000},{sequence:0}]) {
-        try {await handleDrag({type:'independent-pip:drag-move',nonce:binding.nonce,gesture,sequence:1,dx:10,dy:10,...patch},sender);rejected.push(false)} catch {rejected.push(true)}
+        try {await IndependentPiPWorker.windows.handleDrag({type:'independent-pip:drag-move',nonce:binding.nonce,gesture,sequence:1,dx:10,dy:10,...patch},sender);rejected.push(false)} catch {rejected.push(true)}
       }
       const active=(await chrome.storage.session.get(key))[key];
       await chrome.storage.session.set({[key]:{...active,windowId:binding.sourceWindowId}});
-      try {await handleDrag({type:'independent-pip:drag-move',nonce:binding.nonce,gesture,sequence:1,dx:10,dy:10},sender);rejected.push(false)} catch {rejected.push(true)}
+      try {await IndependentPiPWorker.windows.handleDrag({type:'independent-pip:drag-move',nonce:binding.nonce,gesture,sequence:1,dx:10,dy:10},sender);rejected.push(false)} catch {rejected.push(true)}
       await chrome.storage.session.set({[key]:active});
       return rejected;
     })()''')
