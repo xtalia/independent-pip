@@ -8,6 +8,7 @@
 
 ```text
 python -m unittest discover -s tests -p test_browser_lab.py -v
+node --test tests/*.test.mjs
 node --check extension/background.js
 node --check extension/pip.js
 node --check extension/settings.js
@@ -18,6 +19,8 @@ node --check extension/picker.js
 ```
 
 На Linux для импорта тестового стенда задай `TMPDIR` на существующую временную папку. CI делает это через `runner.temp`.
+
+Проверяй также вложенные JS-модули: `python -c "from pathlib import Path; import subprocess; [subprocess.run(['node', '--check', str(p)], check=True) for p in Path('extension').rglob('*.js')]"`. Модульные границы и обязательный evidence-first процесс — в `AGENTS.md`, карта потоков — в `docs/architecture.md`.
 
 ## Реальные browser integration tests — Windows
 
@@ -43,6 +46,7 @@ node --check extension/picker.js
    ```
 
 5. Запусти `python tools/verify.py`. Полные отчёты и screenshots создаются в исключённой из Git папке `reports/`. Это не автоматическая публикация релиза. Фокусные регрессии плавности переноса: `python -m unittest discover -s tests -p test_v14.py -v`; они задерживают ответы реальных API, не подменяя само перемещение окна.
+   Регрессии picker: `python -m unittest discover -s tests -p test_picker_resilience.py -v` — реальная замороженная вкладка и точная ошибка закрытия канала при остановке worker. Пункты ПКМ: `python -m unittest discover -s tests -p test_context_menu.py -v` — реальная регистрация и эффекты callbacks; физический native menu click остаётся отдельной проверкой.
 6. Заверши только собственный браузер и останови fixture-сервер через Ctrl+C:
 
    ```text

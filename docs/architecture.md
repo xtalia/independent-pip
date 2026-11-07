@@ -1,33 +1,49 @@
-# Extension architecture
+# Архитектура Independent PiP
 
-An enhanced Picture-in-Picture extension for Chrome with compact controls and local preferences.
+## Решение
+Лёгкий модульный монолит по функциям с явными зависимостями и контрактами. DDD не применяется: пока нет сложных доменных правил, агрегатов или независимых bounded contexts. PDD не вводится как фреймворк; evidence-first цикл и критерии готовности описаны в [AGENTS.md](../AGENTS.md).
 
-## Video and controls
-`action click / Alt+Shift+P → MV3 service worker → isolated-world script in active tab → select playable HTML5 video → capture video stream → Document PiP window → controls mutate original video`.
+Никакой сборки, контейнера DI и внешних runtime-зависимостей. Worker загружает обычные локальные скрипты через `importScripts`; внедряемые в страницу скрипты работают в ISOLATED world. Каждый модуль изолирует внутреннее состояние в IIFE и отдаёт замороженный namespace/factory.
 
-The source node is never detached, its URL is never copied into another decoder, and its original audio remains authoritative. The mirror is muted and contains only captured video tracks. Closing PiP stops capture tracks, removes listeners/timers/observers and leaves source playback intact.
+## Модули и направление зависимостей
+- `protocol.js` — контракт сообщений, UUID-валидация, порядок инъекции. Не вызывает Chrome API.
+- `background.js` — composition root: создаёт зависимости, регистрирует listeners, не содержит логику поиска/drag/UI.
+- `background/windows.js` — владение PiP-окном, session bindings, последовательность жестов; не ищет видео.
+- `background/discovery.js` — доступные вкладки, ограниченный по времени поиск, сортировка результатов; не запускает видео.
+- `background/playback.js` — запуск PiP и явное открытие picker; зависит от window ownership и контракта инъекции.
+- `background/messages.js` — единственный runtime router; зависит от discovery/playback/windows.
+- `background/menus.js` — native action menu, зависит только от playback и Chrome API настроек.
+- `media.js` — обход DOM/open shadow/same-origin iframe, допустимость видео, WeakMap UUID.
+- `pip-view.js` — DOM/стили; `pip-drag.js` — жесты/очередь; `pip.js` — захват, source controls, обновления, cleanup.
+- `picker-client.js` — транспорт сообщений; `picker.js` — DOM, статусы, выбор пользователя.
+- `settings.js` — нормализация/валидация настроек; `options.*` — форма редактирования.
 
-## Permissions and scope
-- Required `activeTab` + `scripting` + `storage`; optional HTTP/HTTPS host access requested by an explicit chooser button. Without it, only the originating tab is scanned. No cookies, tabCapture, nativeMessaging or remote service. Preferences live in local storage; validated PiP window bindings live in session storage.
-- Activation by extension action or `_execute_action` hotkey. No automatic opening on tab switch; opening uses Chrome transient user activation.
-- Search active document, open shadow roots and same-origin iframes. Cross-origin iframe access is excluded; user must open that frame/video page directly. No permission-policy override.
-- Document PiP requires secure context (HTTPS or loopback) and desktop Chrome with the API. Otherwise use native video PiP if available.
+Циклические зависимости запрещены. Chrome API передаётся worker-модулям явно. Единственный worker namespace для собранных возможностей — `IndependentPiPWorker`; внутренние Map и локальные handlers не становятся ambient globals.
 
-## Controls
-Play/pause, ±10 seconds, seek slider, mute/volume, playback rate, VTT active-cue text, return/close; accessible labels and keyboard shortcuts. Caption text is inserted as text, not HTML. Arbitrary site/YouTube custom DOM captions are not supported automatically.
+## Потоки
+1. Toolbar / Alt+Shift+P → playback → синхронно начатый executeScript → media → pip → view/drag. Старт API нельзя откладывать за await или Promise.then: нужна transient user activation.
+2. Нет подходящего играющего видео → переиспользуемый picker. ПКМ на значке → «Выбор видео» открывает его явно, независимо от playback, не закрывая существующий PiP. «Настройки» вызывает openOptionsPage.
+3. Picker list → client → messages → discovery → определения injected modules + список media. Поиск не включает play/PiP.
+4. Picker select → немедленный sendMessage → messages → playback.openTab → конкретный UUID. Устаревший выбор не переключает на другое видео и не закрывает рабочее окно до валидации.
+5. Pointer drag → PiP requestAnimationFrame → latest-position coalescing → сериализованный worker windows → проверенное chrome.windows.update. Start/end — барьеры, release отправляет конечную позицию. Playback rate не меняется.
 
-Dragging the video uses the PiP window's requestAnimationFrame, not a fixed-delay timer. Commands remain serialized; at most one unsent move per gesture holds the latest coordinates. Start/end are ordering barriers, and release flushes the final position before ending the gesture. Background ownership/nonce/sequence checks and session recovery remain unchanged. Window movement never changes source playback rate.
+## Lifecycle и ошибки picker
+MV3 worker может остановиться в любой момент. Глобальные переменные не считаются durable storage. Binding своего PiP — в storage.session; настройки — в storage.local; нет искусственного keepalive.
 
-## Failure behavior
-No supported playing video (including browser/internal pages that reject injection) → reusable extension-owned chooser. Scan non-discarded HTTP/HTTPS tabs only when optional access is granted, with six concurrent workers; each inaccessible/closed tab is skipped independently. Playing videos sort first, then the originating tab. Text-only labels avoid page-title HTML injection. WeakMap UUIDs identify exact source nodes; stale IDs never select a different video.
-A selection click reaches executeScript before any await to preserve user activation. Scan injection loads discovery/opening definitions only, never starts playback or PiP. Paused selection stays paused. Other failures → visible action badge/title and chooser status.
-Capture DRM/cross-origin/unavailable or Document PiP unavailable → native PiP fallback; custom controls are not promised in fallback.
-An API/user activation/policy denial must be reported rather than bypassed.
+Поиск ведётся максимум шестью concurrent workers, до двух секунд на вкладку и с общим бюджетом шесть секунд. Текущая вкладка и audible-вкладки идут первыми. Недоступная/замороженная/закрытая вкладка не блокирует здоровые; неполный результат помечается `incomplete`. Таймаут не отменяет Chrome executeScript: поздний результат игнорируется, инъекция только определяет функции и не начинает playback.
 
-## Validation boundaries
-Real installed Chrome 156.0.8078.76, isolated scratch profile, extension installed through CDP `Extensions.loadUnpacked` with `--enable-unsafe-extension-debugging`. No Chrome package installation or main-profile modifications.
-Browser-integrated tests exercise real Document PiP and real decoded MP4 frames, not a mocked `requestWindow`. Headless validation confirms browser API behavior and actual PiP target, not visible Windows placement/topmost UX; that remains a manual acceptance item unless a headed check is separately run.
+После закрытия message channel клиент один раз повторяет только list. После повторного сбоя показывает понятное восстановительное действие, а не сырой текст Chrome. Select/open/toggle не повторяются: ответ мог потеряться уже после выполнения команды. Каждый принятый router запрос завершается `{ok:true,...}` или `{ok:false,message}`; неизвестные и чужие сообщения возвращают false.
 
-References:
-- https://developer.chrome.com/docs/web-platform/document-picture-in-picture
-- Locally observed CDP `Extensions` schema at http://127.0.0.1:9233/json/protocol
+## Безопасность и неизменные ограничения
+- Исходный video не отсоединяется, src не загружается во второй декодер, аудио остаётся у сайта. Mirror muted и содержит только video tracks. Cleanup закрывает только собственные ресурсы.
+- Required: activeTab, scripting, storage, contextMenus. Меню добавляется только в контекст action, не на сайты. HTTP/HTTPS host access остаётся optional, с отдельным пользовательским согласием.
+- Проверяются sender.id/URL, nonce/gesture/sequence, child-tab opener и принадлежность нового window. Нельзя двигать исходные/посторонние окна.
+- Нет DRM/policy/opt-out bypass. Cross-origin iframe и closed shadow исключены. Document PiP требует secure context и поддержку API; native fallback не обещает custom controls/captions.
+- Заголовки/стандартные VTT cues вставляются как текст. DOM-субтитры сайтов и VOT — отдельные будущие задачи.
+
+## Доказательства
+Node unit tests проверяют модульные контракты и ограничение повторов. Реальные Chrome integration tests проверяют video/PiP, жесты, lifecycle и остановку worker во время list; frozen renderer воспроизводится через CDP Page.setWebLifecycleState. Native menu registration и реальные эффекты callbacks проверяются отдельно от физического клика по меню Windows.
+
+Точные версии, результаты и SHA-256 — в version-specific verification JSON. Headless не доказывает физическую плавность, меню Windows или global hotkey. Изолированный тестовый профиль не заменяет Reload установленного расширения в пользовательском Chrome.
+
+Справка: [Document PiP](https://developer.chrome.com/docs/web-platform/document-picture-in-picture), [MV3 lifecycle](https://developer.chrome.com/docs/extensions/develop/concepts/service-workers/lifecycle), [contextMenus](https://developer.chrome.com/docs/extensions/reference/api/contextMenus).

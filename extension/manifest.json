@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
   "name": "Independent PiP",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "description": "Picture-in-Picture с управлением исходным видео: без второго декодера и без переноса video из страницы.",
   "minimum_chrome_version": "116",
-  "permissions": ["activeTab", "scripting", "storage"],
+  "permissions": ["activeTab", "scripting", "storage", "contextMenus"],
   "optional_host_permissions": ["http://*/*", "https://*/*"],
   "options_ui": {"page": "options.html", "open_in_tab": true},
   "background": {"service_worker": "background.js"},
