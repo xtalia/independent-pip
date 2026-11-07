@@ -16,6 +16,8 @@ The source node is never detached, its URL is never copied into another decoder,
 ## Controls
 Play/pause, ±10 seconds, seek slider, mute/volume, playback rate, VTT active-cue text, return/close; accessible labels and keyboard shortcuts. Caption text is inserted as text, not HTML. Arbitrary site/YouTube custom DOM captions are not supported automatically.
 
+Dragging the video uses the PiP window's requestAnimationFrame, not a fixed-delay timer. Commands remain serialized; at most one unsent move per gesture holds the latest coordinates. Start/end are ordering barriers, and release flushes the final position before ending the gesture. Background ownership/nonce/sequence checks and session recovery remain unchanged. Window movement never changes source playback rate.
+
 ## Failure behavior
 No supported playing video (including browser/internal pages that reject injection) → reusable extension-owned chooser. Scan non-discarded HTTP/HTTPS tabs only when optional access is granted, with six concurrent workers; each inaccessible/closed tab is skipped independently. Playing videos sort first, then the originating tab. Text-only labels avoid page-title HTML injection. WeakMap UUIDs identify exact source nodes; stale IDs never select a different video.
 A selection click reaches executeScript before any await to preserve user activation. Scan injection loads discovery/opening definitions only, never starts playback or PiP. Paused selection stays paused. Other failures → visible action badge/title and chooser status.

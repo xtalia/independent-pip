@@ -306,21 +306,31 @@ globalThis.IndependentPiPOpen = async (selectedId) => {
     };
     listen(play, 'click', togglePlay);
     let drag;
-    let dragTimer;
+    let dragFrame;
     let suppressClick = false;
     let dragQueue = Promise.resolve();
+    let pendingMove;
     const dragCommand = (type, data = {}) => {
+      // Keep at most one unsent position; never replay old pointer samples.
+      // Start/end remain ordering barriers between independent gestures.
+      if (type === 'drag-move' && pendingMove?.data.gesture === data.gesture) {
+        pendingMove.data = data;
+        return;
+      }
+      const command = { type, data };
+      pendingMove = type === 'drag-move' ? command : undefined;
       dragQueue = dragQueue.catch(() => {}).then(async () => {
+        if (pendingMove === command) pendingMove = undefined;
         if (abort.signal.aborted) return;
-        const response = await chrome.runtime.sendMessage({ type: `independent-pip:${type}`, nonce, ...data });
+        const response = await chrome.runtime.sendMessage({ type: `independent-pip:${command.type}`, nonce, ...command.data });
         if (!response?.ok) throw new Error(response?.message || 'Окно PiP недоступно');
       }).catch(error => {
         if (!abort.signal.aborted) { status.textContent = `Перемещение: ${error.message || error}`; revealControls(); }
       });
     };
     const flushDrag = () => {
-      pipWindow.clearTimeout(dragTimer);
-      dragTimer = undefined;
+      pipWindow.cancelAnimationFrame(dragFrame);
+      dragFrame = undefined;
       if (drag?.moved && drag.latest) {
         dragCommand('drag-move', { gesture: drag.gesture, sequence: ++drag.sequence, ...drag.latest });
         drag.latest = null;
@@ -351,7 +361,7 @@ globalThis.IndependentPiPOpen = async (selectedId) => {
       event.preventDefault();
       preview.style.cursor = 'grabbing';
       drag.latest = { dx, dy };
-      if (dragTimer === undefined) dragTimer = pipWindow.setTimeout(flushDrag, 32);
+      if (dragFrame === undefined) dragFrame = pipWindow.requestAnimationFrame(flushDrag);
     });
     for (const event of ['pointerup', 'pointercancel', 'lostpointercapture']) listen(preview, event, finishDrag);
     listen(pipWindow, 'blur', () => { finishDrag(); pointerDown = false; });
@@ -456,7 +466,8 @@ globalThis.IndependentPiPOpen = async (selectedId) => {
     });
     pipWindow.addEventListener('pagehide', () => {
       observer.disconnect();
-      pipWindow.clearTimeout(dragTimer);
+      pipWindow.cancelAnimationFrame(dragFrame);
+      pendingMove = undefined;
       drag = undefined;
       chrome.runtime.sendMessage({ type: 'independent-pip:release', nonce }).catch(() => {});
       pipWindow.clearTimeout(hideTimer);

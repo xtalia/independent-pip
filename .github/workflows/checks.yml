@@ -31,7 +31,7 @@ jobs:
           from pathlib import Path
           root = Path('extension')
           manifest = json.loads((root / 'manifest.json').read_text(encoding='utf-8'))
-          verification = json.loads(Path('docs/verification-v1.3.json').read_text(encoding='utf-8'))
+          verification = json.loads(Path('docs/verification-v1.4.json').read_text(encoding='utf-8'))
           assert manifest['manifest_version'] == 3
           assert manifest['version'] == verification['version']
           assert manifest['permissions'] == ['activeTab', 'scripting', 'storage']
