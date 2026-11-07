@@ -57,15 +57,15 @@ globalThis.IndependentPiPOpen = async (selectedId) => {
       #pip-controls{position:absolute;z-index:2;inset:auto 0 0;padding:10px 12px 7px;display:grid;gap:5px;background:linear-gradient(transparent,#000c 30%,#000f)}
       .pip-row{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px}
       .pip-group{display:flex;align-items:center;gap:4px;min-width:0}.pip-right{justify-content:flex-end}
-      button{font:18px 'Segoe UI Symbol','Segoe UI Emoji',system-ui,sans-serif;color:inherit;background:transparent;border:0;border-radius:4px;min-width:30px;height:30px;padding:0;cursor:pointer;flex:none}
+      button{display:inline-flex;align-items:center;justify-content:center;font:18px/1 'Segoe UI Symbol','Segoe UI Emoji',system-ui,sans-serif;color:inherit;background:transparent;border:0;border-radius:4px;min-width:30px;height:30px;padding:0;cursor:pointer;flex:none}
       button:hover{background:#ffffff24}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #fff;outline-offset:2px}
-      #pip-captions{font:11px system-ui;font-weight:600}#pip-captions[aria-pressed=true]{text-decoration:underline;text-underline-offset:5px}
-      #pip-rate{font:12px system-ui;color:#fff;background:transparent;border:0;border-radius:4px;width:64px;height:30px;cursor:pointer}#pip-rate option{background:#171717;color:#fff}
+      #pip-rate{appearance:none;font:12px/30px system-ui;text-align:center;padding:0;color:#fff;background:transparent;border:0;border-radius:4px;width:64px;height:30px;cursor:pointer}#pip-rate option{background:#171717;color:#fff}
       input[type=range]{appearance:none;min-width:0;width:100%;height:14px;background:transparent;cursor:pointer;margin:0;accent-color:#fff}
       input[type=range]::-webkit-slider-runnable-track{height:3px;border-radius:3px;background:#777}
       #pip-seek::-webkit-slider-runnable-track{background:linear-gradient(to right,#fff var(--progress,0%),#777 var(--progress,0%))}
+      #pip-seek-tooltip{position:fixed;z-index:5;padding:4px 7px;border:1px solid #666;border-radius:4px;background:#161616f5;font:11px ui-monospace,monospace;white-space:nowrap;pointer-events:none}
       input[type=range]::-webkit-slider-thumb{appearance:none;width:11px;height:11px;border-radius:50%;background:#fff;margin-top:-4px}
-      #pip-time{font:11px ui-monospace,monospace;white-space:nowrap;text-align:center;min-width:76px}
+      #pip-time{display:flex;align-items:center;justify-content:center;height:30px;font:11px/1 ui-monospace,monospace;white-space:nowrap;text-align:center;min-width:76px}
       #pip-status{color:#ffd1c5;margin:0;font-size:12px;overflow-wrap:anywhere}#pip-status:empty{display:none}
       #pip-menu{position:absolute;z-index:3;right:10px;bottom:66px;width:min(270px,calc(100% - 20px));max-height:calc(100% - 76px);overflow:auto;padding:14px;display:grid;gap:12px;background:#161616f5;border:1px solid #555;border-radius:8px;box-shadow:0 8px 28px #000a}
       #pip-rate-form{display:grid;grid-template-columns:1fr 78px 28px;align-items:center;gap:8px;margin:0}#pip-rate-custom{width:100%;min-width:0;font:13px system-ui;color:#fff;background:#252525;border:1px solid #666;border-radius:4px;padding:6px}
@@ -75,7 +75,7 @@ globalThis.IndependentPiPOpen = async (selectedId) => {
       #pip-volume-popup[data-orientation=vertical]{width:36px}
       #pip-volume-popup[data-orientation=vertical] #pip-volume{writing-mode:vertical-lr;direction:rtl;width:16px;height:100%}
       #pip-volume-popup[data-orientation=horizontal] #pip-volume{width:100%;height:14px}
-      @media(max-width:390px){#pip-header{height:38px}#pip-title{font-size:12px}#pip-controls{padding:8px 8px 5px}.pip-row{gap:4px}.pip-group{gap:0}button{min-width:24px;height:28px;font-size:16px}#pip-rate{width:50px;font-size:11px}#pip-time{font-size:10px;min-width:72px}}
+      @media(max-width:390px){#pip-header{height:38px}#pip-title{font-size:12px}#pip-controls{padding:8px 8px 5px}.pip-row{gap:4px}.pip-group{gap:0}button{min-width:24px;height:28px;font-size:16px}#pip-rate{width:50px;height:28px;font-size:11px;line-height:28px}#pip-time{height:28px;font-size:10px;min-width:72px}}
     `;
     doc.head.append(style);
     const preview = doc.createElement('video');
@@ -93,7 +93,9 @@ globalThis.IndependentPiPOpen = async (selectedId) => {
       return element;
     };
     const header = make('header', 'pip-header');
-    header.append(make('span', 'pip-title', document.title || 'Picture-in-Picture'));
+    const title = make('span', 'pip-title', document.title || 'Picture-in-Picture');
+    title.title = title.textContent;
+    header.append(title);
     const returnButton = make('button', 'pip-return', '↩');
     returnButton.title = 'Вернуться во вкладку';
     returnButton.setAttribute('aria-label', returnButton.title);
@@ -103,15 +105,17 @@ globalThis.IndependentPiPOpen = async (selectedId) => {
     header.append(returnButton, closeButton);
     const viewport = make('div', 'pip-viewport');
     const subtitles = make('div', 'pip-subtitles');
-    let captionsEnabled = true;
     viewport.append(preview, subtitles);
     const controls = make('section', 'pip-controls');
     const timeline = make('div', 'pip-timeline');
     const seek = make('input', 'pip-seek');
     Object.assign(seek, { type: 'range', min: '0', step: '0.05' });
     seek.setAttribute('aria-label', 'Позиция видео');
+    const seekTooltip = make('span', 'pip-seek-tooltip');
+    seekTooltip.hidden = true;
+    seekTooltip.setAttribute('aria-hidden', 'true');
     const timeLabel = make('span', 'pip-time');
-    timeline.append(seek);
+    timeline.append(seek, seekTooltip);
     const row = make('div');
     row.className = 'pip-row';
     const back = make('button', 'pip-back', '⏪');
@@ -122,9 +126,6 @@ globalThis.IndependentPiPOpen = async (selectedId) => {
     forward.title = 'Вперёд на 10 секунд';
     forward.setAttribute('aria-label', 'Вперёд на 10 секунд');
     const mute = make('button', 'pip-mute', '🔊');
-    const captions = make('button', 'pip-captions', 'CC');
-    captions.title = 'Показать или скрыть субтитры';
-    captions.setAttribute('aria-label', 'Показать или скрыть субтитры');
     const volume = make('input', 'pip-volume');
     Object.assign(volume, { type: 'range', min: '0', max: '1', step: '0.01' });
     volume.setAttribute('aria-label', 'Громкость');
@@ -178,7 +179,7 @@ globalThis.IndependentPiPOpen = async (selectedId) => {
     left.append(play, back, forward, volumeControl);
     const right = make('div');
     right.className = 'pip-group pip-right';
-    right.append(rate, captions, menuToggle);
+    right.append(rate, menuToggle);
     row.append(left, timeLabel, right);
     controls.append(timeline, row, status);
     doc.body.append(viewport, header, controls, menu);
@@ -193,6 +194,24 @@ globalThis.IndependentPiPOpen = async (selectedId) => {
       const seconds = Math.floor(Number.isFinite(value) && value > 0 ? value : 0);
       return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
     };
+    const hideSeekTooltip = () => { seekTooltip.hidden = true; };
+    const previewTime = (event) => {
+      const bounds = range();
+      if (bounds.end <= bounds.start) { hideSeekTooltip(); return; }
+      const rect = seek.getBoundingClientRect();
+      // The thumb centre travels between half-thumb insets, not edge to edge.
+      const fraction = Math.max(0, Math.min(1, (event.clientX - rect.left - 5.5) / Math.max(1, rect.width - 11)));
+      seekTooltip.textContent = formatTime(bounds.start + fraction * (bounds.end - bounds.start));
+      seekTooltip.hidden = false;
+      const tip = seekTooltip.getBoundingClientRect();
+      seekTooltip.style.left = `${Math.max(2, Math.min(pipWindow.innerWidth - tip.width - 2, event.clientX - tip.width / 2))}px`;
+      seekTooltip.style.top = `${Math.max(2, Math.min(pipWindow.innerHeight - tip.height - 2, event.clientY + 16))}px`;
+    };
+    listen(seek, 'pointerenter', previewTime);
+    listen(seek, 'pointermove', previewTime);
+    for (const event of ['pointerleave', 'pointercancel']) listen(seek, event, hideSeekTooltip);
+    listen(pipWindow, 'blur', hideSeekTooltip);
+    listen(pipWindow, 'resize', hideSeekTooltip);
     const watchedTracks = new WeakSet();
     let lastVolume = source.volume > 0 ? source.volume : 0.5;
     let hideTimer;
@@ -296,8 +315,7 @@ globalThis.IndependentPiPOpen = async (selectedId) => {
         }
       }
       subtitles.textContent = lines.join('\n');
-      subtitles.hidden = !captionsEnabled || !subtitles.textContent;
-      captions.setAttribute('aria-pressed', String(captionsEnabled));
+      subtitles.hidden = !subtitles.textContent;
     };
     const togglePlay = async () => {
       try { source.paused ? await source.play() : source.pause(); status.textContent = ''; }
@@ -407,7 +425,6 @@ globalThis.IndependentPiPOpen = async (selectedId) => {
         status.textContent = '';
       } catch (error) { status.textContent = String(error.message || error); }
     });
-    listen(captions, 'click', () => { captionsEnabled = !captionsEnabled; update(); });
     listen(source.textTracks, 'addtrack', update);
     listen(source.textTracks, 'removetrack', update);
     listen(source.textTracks, 'change', update);

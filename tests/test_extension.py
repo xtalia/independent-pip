@@ -165,10 +165,10 @@ class ExtensionTests(unittest.TestCase):
         wait_for(self.page, 'documentPictureInPicture.window?.document.querySelector("#pip-subtitles")?.textContent==="Caption text"', timeout=3)
         pip = self.pip_target()
         self.assertEqual(evaluate(pip, 'document.querySelector("#pip-subtitles").children.length'), 0)
-        self.click_control('pip-captions')
-        self.assertTrue(evaluate(pip, 'document.querySelector("#pip-subtitles").hidden'))
-        self.click_control('pip-captions')
-        self.assertFalse(evaluate(pip, 'document.querySelector("#pip-subtitles").hidden'))
+        evaluate(self.page, 'track.mode="hidden"')
+        wait_for(pip, 'document.querySelector("#pip-subtitles").hidden')
+        evaluate(self.page, 'track.mode="showing"')
+        wait_for(pip, '!document.querySelector("#pip-subtitles").hidden')
 
     def test_09_keyboard_controls_master_and_escape_closes(self):
         self.activate()
@@ -420,7 +420,7 @@ class ExtensionTests(unittest.TestCase):
                 overflow:document.body.scrollWidth>innerWidth,
                 menu:!!document.querySelector('#pip-menu-toggle'),
                 background:getComputedStyle(document.querySelector('#pip-play')).backgroundColor,
-                controls:['pip-play','pip-back','pip-forward','pip-mute','pip-rate','pip-captions','pip-menu-toggle','pip-return','pip-close'].map(id=>document.getElementById(id)?{id,...rect(id)}:{id,missing:true})};
+                controls:['pip-play','pip-back','pip-forward','pip-mute','pip-rate','pip-menu-toggle','pip-return','pip-close'].map(id=>document.getElementById(id)?{id,...rect(id)}:{id,missing:true})};
             })()''')
             self.assertEqual(layout['video']['y'], 0, layout)
             self.assertEqual(layout['video']['h'], layout['height'], layout)
@@ -608,7 +608,7 @@ class ExtensionTests(unittest.TestCase):
           const input=document.querySelector('#pip-rate-custom');input.value='1.234';
           document.querySelector('#pip-rate-form').requestSubmit();
           const volume=document.querySelector('#pip-volume');volume.value='0.42';volume.dispatchEvent(new Event('input',{bubbles:true}));
-          document.querySelector('#pip-captions').click();document.querySelector('#pip-captions').click();
+
           document.querySelector('#pip-menu-toggle').click();
           setTimeout(resolve,200);
         })'''
