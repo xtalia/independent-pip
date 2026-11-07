@@ -42,7 +42,7 @@ node --check extension/picker.js
    python -c "import sys; sys.path.insert(0,'tools'); from browser_lab import ensure_owned,rpc; b=ensure_owned('chrome'); print(rpc(b['webSocketDebuggerUrl'],[{'method':'Target.createTarget','params':{'url':'http://127.0.0.1:8766/'}}]))"
    ```
 
-5. Запусти `python tools/verify.py`. Полные отчёты и screenshots создаются в исключённой из Git папке `reports/`. Это не автоматическая публикация релиза.
+5. Запусти `python tools/verify.py`. Полные отчёты и screenshots создаются в исключённой из Git папке `reports/`. Это не автоматическая публикация релиза. Фокусные регрессии плавности переноса: `python -m unittest discover -s tests -p test_v14.py -v`; они задерживают ответы реальных API, не подменяя само перемещение окна.
 6. Заверши только собственный браузер и останови fixture-сервер через Ctrl+C:
 
    ```text

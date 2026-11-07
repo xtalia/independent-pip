@@ -17,6 +17,7 @@ sys.path.insert(0, str(ROOT / 'tools'))
 import test_extension
 import test_v12
 import test_v13
+import test_v14
 from browser_lab import ensure_owned, fetch, rpc, RUNTIME
 
 
@@ -58,7 +59,7 @@ def main():
             for match in re.finditer(pattern, text):
                 findings.append({'file': file.name, 'rule': name, 'offset': match.start()})
     output = io.StringIO()
-    suite = unittest.TestSuite([unittest.defaultTestLoader.loadTestsFromTestCase(test_extension.ExtensionTests), unittest.defaultTestLoader.loadTestsFromTestCase(test_v12.V12Tests), unittest.defaultTestLoader.loadTestsFromTestCase(test_v13.V13GrantedTests), unittest.defaultTestLoader.loadTestsFromTestCase(test_v13.V13Tests)])
+    suite = unittest.TestSuite([unittest.defaultTestLoader.loadTestsFromTestCase(test_extension.ExtensionTests), unittest.defaultTestLoader.loadTestsFromTestCase(test_v12.V12Tests), unittest.defaultTestLoader.loadTestsFromTestCase(test_v13.V13GrantedTests), unittest.defaultTestLoader.loadTestsFromTestCase(test_v13.V13Tests), unittest.defaultTestLoader.loadTestsFromTestCase(test_v14.V14Tests)])
     expected_count = suite.countTestCases()
     with contextlib.redirect_stdout(output):
         result = unittest.TextTestRunner(stream=output, verbosity=2, resultclass=RecordedResult).run(suite)
